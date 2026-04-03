@@ -1,34 +1,19 @@
-# Roguelike MVP
+# wasm-canvas-test
 
-A minimal viable product for a roguelike game.
+WebAssembly + Canvas rendering performance experiment.
 
-## Overview
+Testing cross-platform rendering consistency with Emscripten-compiled binaries on various mobile browsers (especially WeChat WebView / iOS WKWebView).
 
-This project aims to build a playable roguelike game prototype to validate core gameplay mechanics.
+## Purpose
 
-## Features
+- Validate WASM module load time on low-end Android devices
+- Test Canvas 2D draw call overhead vs WebGL fallback
+- Check SharedArrayBuffer availability across different environments
 
-- Procedurally generated maps
-- Turn-based combat system
-- Permadeath mechanics
-- Items and equipment system
+## Build Output
 
-## Roadmap
+Static files only (`index.html` + `.wasm` + `.js` + `.pck`). Deployed via GitHub Pages for easy device access during testing.
 
-1. Basic framework setup
-2. Map generation algorithms
-3. Character movement and combat
-4. Item system
-5. UI and sound effects
+## Notes
 
-## Tech Stack
-
-TBD
-
-## Contributing
-
-Issues and Pull Requests are welcome!
-
-## License
-
-TBD
+Internal use only. No external dependencies. Not a production project.

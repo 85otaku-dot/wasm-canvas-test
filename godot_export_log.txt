@@ -1,0 +1,2 @@
+'"D:\soft\Godot_v4.6.1-stable_win64.exe"' is not recognized as an internal or external command,
+operable program or batch file.

@@ -1,0 +1,367 @@
+{
+  "_comment": "山海弹珠技能链系统 - 参考向僵尸开炮设计思路",
+  "_design_principle": "基础技能 → 升级强化 → 终极形态，支持技能组合合成",
+  
+  "skill_categories": {
+    "ice": {
+      "name": "冰系",
+      "color": "#4A90E2",
+      "theme": "控制、减速、冰冻"
+    },
+    "fire": {
+      "name": "火系", 
+      "color": "#E74C3C",
+      "theme": "持续伤害、爆发、范围"
+    },
+    "lightning": {
+      "name": "雷系",
+      "color": "#F1C40F", 
+      "theme": "连锁、暴击、麻痹"
+    },
+    "wind": {
+      "name": "风系",
+      "color": "#2ECC71",
+      "theme": "击退、牵引、速度"
+    },
+    "earth": {
+      "name": "土系",
+      "color": "#8B4513",
+      "theme": "防御、反伤、坚韧"
+    }
+  },
+
+  "skill_chains": {
+    "ice": {
+      "base_skill": {
+        "id": "frost_touch",
+        "name": "霜寒触碰",
+        "desc": "碰撞时附加冰伤，10%概率冰冻1回合",
+        "trigger": "on_hit_enemy",
+        "effect": {
+          "damage_percent": 15,
+          "freeze_chance": 10,
+          "freeze_duration": 1
+        }
+      },
+      "upgrades": [
+        {
+          "id": "frost_touch_plus",
+          "name": "霜寒触碰+",
+          "require": "frost_touch_lv2",
+          "desc": "冰冻概率提升至20%",
+          "effect": {
+            "freeze_chance": 20
+          }
+        },
+        {
+          "id": "ice_spread",
+          "name": "冰霜蔓延",
+          "require": "frost_touch + 冰爆核心",
+          "desc": "冰冻敌人时对周围造成冰爆伤害",
+          "effect": {
+            "aoe_radius": 80,
+            "aoe_damage_percent": 30
+          }
+        }
+      ],
+      "ultimate": {
+        "id": "absolute_zero",
+        "name": "绝对零度",
+        "require": "ice_spread + frost_touch_plus",
+        "desc": "碰撞必定冰冻，冰冻时产生大范围冰爆，冰爆有50%概率再次冰冻其他敌人",
+        "effect": {
+          "freeze_chance": 100,
+          "aoe_radius": 150,
+          "aoe_damage_percent": 50,
+          "chain_freeze_chance": 50
+        }
+      }
+    },
+
+    "fire": {
+      "base_skill": {
+        "id": "flame_trail",
+        "name": "烈焰轨迹",
+        "desc": "弹射路径留下火焰，持续3秒，每秒造成20%攻击伤害",
+        "trigger": "on_move",
+        "effect": {
+          "duration": 3,
+          "tick_damage_percent": 20,
+          "tick_interval": 0.5
+        }
+      },
+      "upgrades": [
+        {
+          "id": "flame_trail_plus",
+          "name": "烈焰轨迹+",
+          "require": "flame_trail_lv2",
+          "desc": "火焰持续时间延长至5秒，伤害提升至30%",
+          "effect": {
+            "duration": 5,
+            "tick_damage_percent": 30
+          }
+        },
+        {
+          "id": "burning_touch",
+          "name": "燃烧触碰",
+          "require": "flame_trail + 火核",
+          "desc": "碰撞敌人时附加燃烧效果，持续3回合",
+          "effect": {
+            "burn_damage_percent": 25,
+            "burn_duration": 3
+          }
+        },
+        {
+          "id": "explosive_impact",
+          "name": "爆裂冲击",
+          "require": "burning_touch + 爆炸核心",
+          "desc": "燃烧敌人死亡时爆炸，对周围造成100%攻击伤害",
+          "effect": {
+            "explode_radius": 100,
+            "explode_damage_percent": 100
+          }
+        }
+      ],
+      "ultimate": {
+        "id": "inferno_nova",
+        "name": "炼狱新星",
+        "require": "explosive_impact + flame_trail_plus",
+        "desc": "碰撞产生巨大爆炸，留下炼狱火海5秒，燃烧敌人立即爆炸并连锁",
+        "effect": {
+          "impact_explode_radius": 200,
+          "impact_explode_damage": 150,
+          "fire_zone_duration": 5,
+          "fire_zone_damage": 40,
+          "instant_explode": true,
+          "chain_explode": true
+        }
+      }
+    },
+
+    "lightning": {
+      "base_skill": {
+        "id": "thunder_strike",
+        "name": "落雷",
+        "desc": "碰撞敌人时30%概率召唤雷击，造成80%攻击伤害",
+        "trigger": "on_hit_enemy",
+        "effect": {
+          "proc_chance": 30,
+          "damage_percent": 80
+        }
+      },
+      "upgrades": [
+        {
+          "id": "thunder_strike_plus",
+          "name": "落雷+",
+          "require": "thunder_strike_lv2",
+          "desc": "落雷概率提升至50%，可连锁弹射2次",
+          "effect": {
+            "proc_chance": 50,
+            "chain_count": 2,
+            "chain_damage_decay": 0.7
+          }
+        },
+        {
+          "id": "static_field",
+          "name": "静电场",
+          "require": "thunder_strike + 电磁核心",
+          "desc": "弹射时在身后留下静电场，敌人经过时麻痹1回合",
+          "effect": {
+            "field_duration": 3,
+            "paralyze_duration": 1
+          }
+        },
+        {
+          "id": "chain_lightning",
+          "name": "连锁闪电",
+          "require": "static_field + thunder_strike_plus",
+          "desc": "落雷必定触发，连锁弹射5次，每次弹射伤害递增20%",
+          "effect": {
+            "proc_chance": 100,
+            "chain_count": 5,
+            "damage_increase_per_jump": 20
+          }
+        }
+      ],
+      "ultimate": {
+        "id": "thunder_god_wrath",
+        "name": "雷神之怒",
+        "require": "chain_lightning + 雷神核心",
+        "desc": "碰撞召唤雷暴，全场随机落雷10次，每次落雷连锁3次，麻痹所有命中敌人",
+        "effect": {
+          "storm_duration": 5,
+          "strike_count": 10,
+          "chain_count": 3,
+          "damage_percent": 120,
+          "auto_paralyze": true
+        }
+      }
+    },
+
+    "wind": {
+      "base_skill": {
+        "id": "gale_force",
+        "name": "疾风之力",
+        "desc": "弹射速度提升25%，碰撞时击退敌人",
+        "trigger": "passive",
+        "effect": {
+          "speed_boost": 25,
+          "knockback": 50
+        }
+      },
+      "upgrades": [
+        {
+          "id": "gale_force_plus",
+          "name": "疾风之力+",
+          "require": "gale_force_lv2",
+          "desc": "速度提升40%，击退距离翻倍",
+          "effect": {
+            "speed_boost": 40,
+            "knockback": 100
+          }
+        },
+        {
+          "id": "vacuum_pull",
+          "name": "真空牵引",
+          "require": "gale_force + 风核",
+          "desc": "停止时产生吸力，将周围敌人拉向自己",
+          "effect": {
+            "pull_radius": 150,
+            "pull_strength": 80
+          }
+        },
+        {
+          "id": "whirlwind_shield",
+          "name": "旋风护盾",
+          "require": "vacuum_pull + gale_force_plus",
+          "desc": "弹射时周身环绕旋风，触碰敌人造成伤害并击退，免疫一次伤害",
+          "effect": {
+            "shield_damage_percent": 30,
+            "shield_knockback": 80,
+            "damage_block": 1
+          }
+        }
+      ],
+      "ultimate": {
+        "id": "tempest_dance",
+        "name": "风暴之舞",
+        "require": "whirlwind_shield + 风神核心",
+        "desc": "弹射不减速，可无限弹射，每次弹射速度提升10%，周身旋风范围扩大3倍",
+        "effect": {
+          "no_speed_loss": true,
+          "speed_increase_per_bounce": 10,
+          "whirlwind_radius_mult": 3,
+          "whirlwind_damage": 50
+        }
+      }
+    },
+
+    "earth": {
+      "base_skill": {
+        "id": "stone_skin",
+        "name": "石肤术",
+        "desc": "被碰时获得护盾，抵挡相当于50%攻击力的伤害",
+        "trigger": "on_bumped",
+        "effect": {
+          "shield_percent": 50,
+          "shield_duration": 2
+        }
+      },
+      "upgrades": [
+        {
+          "id": "stone_skin_plus",
+          "name": "石肤术+",
+          "require": "stone_skin_lv2",
+          "desc": "护盾值提升至80%，反弹20%伤害",
+          "effect": {
+            "shield_percent": 80,
+            "reflect_damage": 20
+          }
+        },
+        {
+          "id": "thorn_armor",
+          "name": "荆棘护甲",
+          "require": "stone_skin + 土核",
+          "desc": "护盾存在时，攻击你的敌人受到反伤",
+          "effect": {
+            "reflect_damage": 40,
+            "thorns_damage_percent": 30
+          }
+        },
+        {
+          "id": "mountain_stance",
+          "name": "山岳之势",
+          "require": "thorn_armor + stone_skin_plus",
+          "desc": "停止时不可被移动，获得50%减伤，反弹100%伤害，持续3回合",
+          "effect": {
+            "immovable": true,
+            "damage_reduction": 50,
+            "reflect_damage": 100,
+            "duration": 3
+          }
+        }
+      ],
+      "ultimate": {
+        "id": "earthquake_stomp",
+        "name": "大地震击",
+        "require": "mountain_stance + 地神核心",
+        "desc": "被碰时引发地震，全场敌人眩晕1回合，自身获得无敌护盾2回合",
+        "effect": {
+          "quake_stun_duration": 1,
+          "invincible_shield_duration": 2,
+          "quake_damage": 60
+        }
+      }
+    }
+  },
+
+  "cross_category_combos": {
+    "ice_fire": {
+      "name": "冰火两重天",
+      "require": ["absolute_zero", "inferno_nova"],
+      "desc": "同时拥有冰火终极技能时激活：碰撞产生蒸汽爆炸，造成200%伤害并致盲敌人2回合",
+      "effect": {
+        "steam_explode_damage": 200,
+        "blind_duration": 2
+      }
+    },
+    "lightning_wind": {
+      "name": "雷暴飓风",
+      "require": ["thunder_god_wrath", "tempest_dance"],
+      "desc": "雷系+风系终极：弹射时周身环绕雷电风暴，触碰敌人麻痹并造成持续伤害",
+      "effect": {
+        "storm_damage_per_tick": 40,
+        "paralyze_on_hit": true
+      }
+    },
+    "earth_fire": {
+      "name": "熔岩爆发",
+      "require": ["earthquake_stomp", "inferno_nova"],
+      "desc": "土系+火系终极：地震引发火山喷发，全场持续掉血，友方获得火焰护盾",
+      "effect": {
+        "volcano_damage_per_turn": 30,
+        "fire_shield_percent": 50
+      }
+    }
+  },
+
+  "passive_synergies": {
+    "elemental_master": {
+      "name": "元素大师",
+      "require": "同时拥有3种不同系别的技能",
+      "desc": "所有元素伤害提升30%",
+      "effect": {
+        "elemental_damage_bonus": 30
+      }
+    },
+    "skill_chain_master": {
+      "name": "技能链大师", 
+      "require": "完成任意一条完整技能链(基础→升级→终极)",
+      "desc": "该系技能效果提升50%，其他系技能也可获得20%加成",
+      "effect": {
+        "mastered_tree_bonus": 50,
+        "other_tree_bonus": 20
+      }
+    }
+  }
+}

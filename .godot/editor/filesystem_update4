@@ -1,0 +1,11 @@
+res://scripts/battle/battle_scene.gd
+res://scripts/battle/realtime_battle_scene.gd
+res://scripts/enemies/enemy_base.gd
+res://scripts/battle/wave_manager.gd
+res://scripts/autoloads/vfx_manager.gd
+res://scripts/battle/shoot_controller.gd
+res://scripts/characters/unit_base.gd
+res://scripts/autoloads/game_manager.gd
+res://scripts/battle/card_pool_manager.gd
+res://scripts/battle/turn_manager.gd
+res://scripts/battle/bullet.gd

@@ -1,0 +1,207 @@
+# ============================
+# 通用敏感文件
+# ============================
+
+# 环境变量/配置文件
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+.env.test
+.envrc
+
+# 密钥/证书
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+id_dsa
+id_dsa.pub
+id_ecdsa
+id_ecdsa.pub
+id_ed25519
+id_ed25519.pub
+.ssh/
+
+# API 密钥/令牌
+*.token
+*.secret
+secrets.json
+secrets.yaml
+secrets.yml
+config.json
+config.yaml
+config.yml
+
+# ============================
+# IDE 和编辑器
+# ============================
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ============================
+# 操作系统
+# ============================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.nfs*
+
+# ============================
+# 构建输出
+# ============================
+
+# 通用
+bin/
+obj/
+build/
+Build/
+dist/
+out/
+*.exe
+*.dll
+*.so
+*.dylib
+*.pdb
+*.ilk
+*.idb
+
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+Recordings/
+
+# 自动生成的 VS/MD/Consulo 解决方案和项目文件
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity3D 生成的 meta 文件
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity3D 崩溃报告
+crashlytics-build.properties
+
+# ============================
+# 依赖和包管理
+# ============================
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# .NET
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ============================
+# 日志和临时文件
+# ============================
+
+*.log
+*.log.*
+logs/
+*.tmp
+*.temp
+*.cache
+*.swp
+*.swo
+*~
+
+# ============================
+# 测试和覆盖率
+# ============================
+
+coverage/
+*.lcov
+.nyc_output/
+
+# ============================
+# 其他
+# ============================
+
+# 备份文件
+*.bak
+*.backup
+*.old
+*.orig
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3

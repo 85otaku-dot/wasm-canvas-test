@@ -1,0 +1,123 @@
+# 策略：默认「未在下面单独声明的」一律视为二进制 → Git LFS
+# 其后列出的格式 → 普通 Git 文本，走文本 diff（不使用 LFS）
+# 说明：Git 对每个属性取「最后一条匹配规则」；因此必须先写 *，再写文本白名单。
+
+# 未匹配下文规则的任何文件：二进制 + LFS（含未知扩展名、无扩展名文件）
+* filter=lfs diff=lfs merge=lfs -text
+
+# 版本库与工具配置（必须保持文本、且不能使用 LFS）
+.gitattributes text -filter
+.gitignore text -filter
+.gitmodules text -filter
+.git-blame-ignore-revs text -filter
+.editorconfig text -filter
+*.gitattributes text -filter
+*.gitignore text -filter
+
+# 常见无扩展名文件（按需增删）
+Dockerfile text -filter
+Dockerfile.* text -filter
+Makefile text -filter
+makefile text -filter
+LICENSE text -filter
+LICENSE.* text -filter
+README text -filter
+README.* text -filter
+CHANGELOG text -filter
+CHANGELOG.* text -filter
+CONTRIBUTING text -filter
+CONTRIBUTING.* text -filter
+CODEOWNERS text -filter
+
+# Unity / C# 工程：明确视为文本的格式
+*.meta text -filter
+*.cs text -filter
+*.shader text -filter
+*.cginc text -filter
+*.hlsl text -filter
+*.compute text -filter
+*.glsl text -filter
+*.glslinc text -filter
+*.rsp text -filter
+*.asmdef text -filter
+*.asmref text -filter
+*.inputactions text -filter
+*.uxml text -filter
+*.uss text -filter
+*.shadergraph text -filter
+*.shadersubgraph text -filter
+
+# Unity YAML / 序列化资源（可按需为 .unity / .prefab 单独加 merge=union）
+*.prefab text -filter
+*.unity text -filter
+*.asset text -filter
+*.mat text -filter
+*.anim text -filter
+*.controller text -filter
+*.overrideController text -filter
+*.mask text -filter
+*.physicMaterial text -filter
+*.physicsMaterial2D text -filter
+*.spriteatlas text -filter
+*.terrainlayer text -filter
+*.brush text -filter
+*.flare text -filter
+*.fontsettings text -filter
+*.guiskin text -filter
+*.rendertexture text -filter
+*.cubemap text -filter
+*.avatar text -filter
+*.playable text -filter
+*.signal text -filter
+*.preset text -filter
+
+# -----------------------------------------------------------------------------
+# 通用源码、配置、文档、数据交换（文本）
+# -----------------------------------------------------------------------------
+*.txt text -filter
+*.md text -filter
+*.markdown text -filter
+*.json text -filter
+*.xml text -filter
+*.xaml text -filter
+*.yaml text -filter
+*.yml text -filter
+*.csv text -filter
+*.tsv text -filter
+*.html text -filter
+*.htm text -filter
+*.css text -filter
+*.scss text -filter
+*.less text -filter
+*.js text -filter
+*.mjs text -filter
+*.cjs text -filter
+*.jsx text -filter
+*.ts text -filter
+*.tsx text -filter
+*.vue text -filter
+*.lua text -filter
+*.plist text -filter
+*.props text -filter
+*.targets text -filter
+*.config text -filter
+*.ini text -filter
+*.toml text -filter
+*.cfg text -filter
+*.conf text -filter
+
+# Visual Studio / MSBuild（Unity 在 Windows 上常见）
+*.sln text -filter
+*.csproj text -filter
+*.vbproj text -filter
+*.fsproj text -filter
+*.vcxproj text -filter
+*.vcxproj.filters text -filter
+
+# Shell / 脚本
+*.sh text -filter
+*.bash text -filter
+*.zsh text -filter
+*.bat text -filter
+*.cmd text -filter
+*.ps1 text -filter

@@ -1,19 +1,28 @@
 # =============================================================================
-# 山海弹珠 — GitHub Pages 一键部署脚本
+# 山海弹珠 — HTML5 导出 + GitHub Pages 一键部署脚本
 # 用法：在 PowerShell 中运行  .\deploy_web.ps1
-# 前提：已在 Godot 编辑器中完成 Web 导出，export_web/ 文件夹存在
 # =============================================================================
 
-$GIT = 'C:\"Program Files"\Git\bin\git.exe'
+$GIT    = 'C:\"Program Files"\Git\bin\git.exe'
+$GODOT  = "D:\soft\Godot_v4.6.1-stable_win64.exe"
 $EXPORT_DIR = "export_web"
 $BRANCH = "gh-pages"
 
-# ---------- 1. 检查导出目录 ----------
-if (-not (Test-Path "$EXPORT_DIR\index.html")) {
-    Write-Host "[错误] 未找到 $EXPORT_DIR\index.html" -ForegroundColor Red
-    Write-Host "请先在 Godot 编辑器执行 项目 → 导出 → Web → 导出项目" -ForegroundColor Yellow
+# ---------- 1. Godot 导出 HTML5 ----------
+Write-Host "[信息] 开始 Godot 导出 Web..." -ForegroundColor Cyan
+if (-not (Test-Path $GODOT)) {
+    Write-Host "[错误] 找不到 Godot：$GODOT" -ForegroundColor Red
+    Write-Host "请修改脚本顶部 `$GODOT 变量为正确路径" -ForegroundColor Yellow
     exit 1
 }
+New-Item -ItemType Directory -Force -Path $EXPORT_DIR | Out-Null
+& $GODOT --headless --export-release "Web" "$EXPORT_DIR/index.html"
+if (-not (Test-Path "$EXPORT_DIR\index.html")) {
+    Write-Host "[错误] 导出失败，未生成 index.html" -ForegroundColor Red
+    Write-Host "请检查是否已安装 Web 导出模板（编辑器 → 导出模板管理器）" -ForegroundColor Yellow
+    exit 1
+}
+Write-Host "[OK] 导出完成" -ForegroundColor Green
 
 # ---------- 2. 检查/添加 GitHub 远程 ----------
 $remotes = Invoke-Expression "$GIT remote -v"

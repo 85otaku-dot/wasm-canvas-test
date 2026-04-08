@@ -1,19 +1,132 @@
-# wasm-canvas-test
+# 山海弹珠
 
-WebAssembly + Canvas rendering performance experiment.
+> Godot 4.6 开发的弹射 + 肉鸽手游 | 竖屏 720×1280 | HTML5 导出
 
-Testing cross-platform rendering consistency with Emscripten-compiled binaries on various mobile browsers (especially WeChat WebView / iOS WKWebView).
+## 项目简介
 
-## Purpose
+《山海弹珠》是一款结合「怪物弹珠」弹射操作与「向僵尸开炮」肉鸽构筑的竖屏手游。玩家拖拽弹射主角撞击敌人，通过三选一系统构建技能组合，挑战 10 波山海经风格敌人。
 
-- Validate WASM module load time on low-end Android devices
-- Test Canvas 2D draw call overhead vs WebGL fallback
-- Check SharedArrayBuffer availability across different environments
+**核心玩法**：
+- 弹射操作：拖拽蓄力 → 松手发射 → 碰撞敌人造成伤害
+- 肉鸽构筑：每回合三选一获得技能，打造专属流派
+- 随从系统：招募山海角色作为弹射单位协同作战
 
-## Build Output
+## 技术栈
 
-Static files only (`index.html` + `.wasm` + `.js` + `.pck`). Deployed via GitHub Pages for easy device access during testing.
+- **引擎**: Godot 4.6 (Mobile 渲染器)
+- **语言**: GDScript
+- **平台**: HTML5 Web 导出 (主), Android/iOS (预留)
+- **分辨率**: 720×1280 竖屏
 
-## Notes
+## 项目结构
 
-Internal use only. No external dependencies. Not a production project.
+```
+山海弹珠/
+├── assets/           # 美术资源
+│   ├── audio/        # 音效
+│   ├── fonts/        # 字体 (simhei.ttf)
+│   └── sprites/      # 精灵图
+├── resources/        # 数据配置
+│   ├── characters/   # 角色配置
+│   ├── enemies/      # 敌人配置
+│   ├── skills/       # 技能配置
+│   └── waves/        # 波次配置
+├── scenes/           # 场景文件
+│   ├── battle/       # 战斗场景
+│   ├── characters/   # 角色场景
+│   ├── enemies/      # 敌人场景
+│   ├── main/         # 主菜单
+│   └── ui/           # UI 组件
+├── scripts/          # 脚本代码
+│   ├── autoloads/    # 全局单例
+│   ├── battle/       # 战斗逻辑
+│   ├── characters/   # 角色逻辑
+│   ├── enemies/      # 敌人逻辑
+│   ├── effects/      # 特效
+│   ├── main/         # 主菜单
+│   ├── skills/       # 技能系统
+│   └── ui/           # UI 逻辑
+└── export_web/       # HTML5 导出目录
+```
+
+## 核心系统
+
+### 1. 弹射物理系统
+- 墙壁/敌人碰撞反弹
+- 弹力衰减与补充机制
+- 线性阻尼控制手感
+
+### 2. 技能系统
+- 18 种主动/被动技能
+- 技能链合成机制
+- 影分身、穿透、暴击等流派
+
+### 3. 三选一构筑
+- 每回合升级时选择
+- 「我全都要」高风险高回报选项
+- 分阶段卡牌池 (T1/T2/T3)
+
+### 4. 波次系统
+- 10 波渐进难度
+- 喽啰 → 精英 → BOSS 循环
+- 特殊机制波次 (陷阱、连续战)
+
+## 本地运行
+
+### 方式一：Godot 编辑器
+1. 安装 Godot 4.6+
+2. 导入项目
+3. F5 运行
+
+### 方式二：HTML5 本地测试
+```powershell
+# 导出 Web 版本后
+cd export_web
+python -m http.server 8080
+# 浏览器访问 http://localhost:8080
+```
+
+## 导出配置
+
+项目已配置 Web 导出预设，导出路径：`export_web/index.html`
+
+**导出设置要点**：
+- 包含所有资源
+- 中文字体必须打包 (simhei.ttf)
+- 推荐启用 gzip 压缩
+
+## 部署
+
+### Netlify (外网)
+1. 推送 `export_web` 目录到 GitHub
+2. Netlify 连接仓库自动部署
+3. 访问地址：`https://<site>.netlify.app`
+
+### GitLab Pages (内网)
+已配置 `.gitlab-ci.yml`，推送到 GitLab 自动部署到 Pages。
+
+## 开发规范
+
+- 使用 **GDScript** 编写逻辑
+- 物理相关数值通过 `GameManager` 全局调整
+- UI 文字使用 simhei.ttf 确保中文显示
+- 场景文件 (.tscn) 与脚本 (.gd) 分离
+
+## 团队成员
+
+- 策划 + 程序：原始人
+
+## 版本历史
+
+- **v0.1 MVP**: 核心弹射 + 三选一 + 10 波战斗
+
+## 待办事项
+
+- [ ] 美术资源替换 (当前使用占位图)
+- [ ] 音效系统完善
+- [ ] 即时制模式开发
+- [ ] 更多技能与敌人
+
+---
+
+**注意**: 本项目为内部开发版本，请勿外传。
